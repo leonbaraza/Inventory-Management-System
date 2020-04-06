@@ -1,0 +1,216 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Inventories
+{% endblock %}
+
+
+{% block content %}
+
+
+<div class="container ">
+
+    <!-- Button trigger modal -->
+    <button type="button" style="margin-top: 30px;" class="btn btn-primary" data-toggle="modal"
+        data-target="#addInventories">
+        Add Inventory
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="addInventories" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add New Inventory</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    
+
+                    <form>
+                        
+                        <!-- name field -->
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Name</label>
+
+                            <input type="name" class="form-control" id="exampleInputEmail1"
+                                aria-describedby="emailHelp">
+
+                            <small id="emailHelp" class="form-text text-muted">Add stock for this
+                                inventory</small>
+                        </div>
+
+                        <!-- type field -->
+
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Type</label>
+
+                            <select class="form-control" id="exampleFormControlSelect1">
+                                <option></option>
+                                <option>Product</option>
+                                <option>Service</option>
+                            </select>
+                        </div>
+
+                        <!-- BP field -->
+                        <div class="form-group">
+
+                            <label for="exampleInputEmail1">Buying Price</label>
+
+                            <input type="float" class="form-control" id="exampleInputEmail1"
+                                aria-describedby="emailHelp">
+                        </div>
+
+                        <!-- SP field -->
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Selling Price</label>
+
+                            <input type="float" class="form-control" id="exampleInputEmail1"
+                                aria-describedby="emailHelp">
+                        </div>
+
+                    </form>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+<div class="container-fluid" style="margin-top: 30px;">
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Type</th>
+                <th scope="col">Buying Price</th>
+                <th scope="col">Selling Price</th>
+                <th scope="col">Stock</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+                <td>@mdo</td>
+                <td>@mdo</td>
+                <td>
+
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addStock">
+                        Add Stock
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="addStock" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Add Stock</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+
+
+                                    <form>
+                                        <div class="form-group">
+
+                                            <label for="exampleInputEmail1">Stock</label>
+
+                                            <input type="number" class="form-control" id="exampleInputEmail1"
+                                                aria-describedby="emailHelp">
+
+                                            <small id="emailHelp" class="form-text text-muted">Add stock for this
+                                                inventory</small>
+
+                                        </div>
+                                    </form>
+
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#makeSale">
+                        Make Sale
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="makeSale" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Make Sale</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    
+                                    
+
+                                    <form>
+                                        <div class="form-group">
+
+                                            <label for="exampleInputEmail1">Quantity</label>
+
+                                            <input type="number" class="form-control" id="exampleInputEmail1"
+                                                aria-describedby="emailHelp">
+
+                                            <small id="emailHelp" class="form-text text-muted">Number of sales</small>
+
+                                        </div>
+                                    </form>
+
+
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                    <button type="button" class="btn btn-warning">View Sales</button>
+                    <button type="button" class="btn btn-info">Edit</button>
+                    <button type="button" class="btn btn-danger">Delete</button>
+
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

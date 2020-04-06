@@ -44,9 +44,15 @@ def contact():
 def service():
     return render_template('service.html')
 
+
 @app.route('/about')
 def about():
     return render_template('about.html')
+
+
+@app.route('/inventories')
+def inventories():
+    return render_template('inventories.html')
 
 
 # Run your app
