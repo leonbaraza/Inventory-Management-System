@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Inventories
+Inventories
 {% endblock %}
 
 
@@ -28,10 +28,10 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    
+
 
                     <form>
-                        
+
                         <!-- name field -->
                         <div class="form-group">
                             <label for="exampleInputEmail1">Name</label>
@@ -173,8 +173,8 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    
-                                    
+
+
 
                                     <form>
                                         <div class="form-group">
@@ -204,7 +204,84 @@
 
 
                     <button type="button" class="btn btn-warning">View Sales</button>
-                    <button type="button" class="btn btn-info">Edit</button>
+
+
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#editInventory">
+                        Edit
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="editInventory" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Edit Inventory</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+
+
+                                    <form>
+
+                                        <!-- name field -->
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Name</label>
+
+                                            <input type="name" class="form-control" id="exampleInputEmail1"
+                                                aria-describedby="emailHelp">
+
+                                            <small id="emailHelp" class="form-text text-muted">Add stock for this
+                                                inventory</small>
+                                        </div>
+
+                                        <!-- type field -->
+
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Type</label>
+
+                                            <select class="form-control" id="exampleFormControlSelect1">
+                                                <option></option>
+                                                <option>Product</option>
+                                                <option>Service</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- BP field -->
+                                        <div class="form-group">
+
+                                            <label for="exampleInputEmail1">Buying Price</label>
+
+                                            <input type="float" class="form-control" id="exampleInputEmail1"
+                                                aria-describedby="emailHelp">
+                                        </div>
+
+                                        <!-- SP field -->
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Selling Price</label>
+
+                                            <input type="float" class="form-control" id="exampleInputEmail1"
+                                                aria-describedby="emailHelp">
+                                        </div>
+
+                                    </form>
+
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
                     <button type="button" class="btn btn-danger">Delete</button>
 
                 </td>
