@@ -28,15 +28,41 @@ Inventories
                     </button>
                 </div>
                 <div class="modal-body">
+                    
+                    <!-- 
 
+                        1. change the save button type to submit
 
-                    <form>
+                        2. add an action and methods attribute to the form 
+                            - ---- METHODS ------
+                            methods are http verbs used to tell the browser what to do
+
+                            a. GET - used to display information to the browser
+
+                                - Its not a must you specify a get request because by default
+                                all browser have been built in a get request
+
+                            b. POST - used to send information
+                                - It must be declared for it to be used
+                                - All forms must be given a post request before submission
+
+                            c. PUT - used to update in4
+                            d. DELETE - get rid off
+
+                            ------ACTION--------
+                            What to do or where to go once someone clicks save
+
+                        3. Add a name attribute to all fields (input, select)
+                        
+                    -->
+
+                    <form action="{{ url_for('inventories') }}" method="POST">
 
                         <!-- name field -->
                         <div class="form-group">
                             <label for="exampleInputEmail1">Name</label>
 
-                            <input type="name" class="form-control" id="exampleInputEmail1"
+                            <input name="name" type="name" class="form-control" id="exampleInputEmail1"
                                 aria-describedby="emailHelp">
 
                             <small id="emailHelp" class="form-text text-muted">Add stock for this
@@ -48,7 +74,7 @@ Inventories
                         <div class="form-group">
                             <label for="exampleInputEmail1">Type</label>
 
-                            <select class="form-control" id="exampleFormControlSelect1">
+                            <select name="type" class="form-control" id="exampleFormControlSelect1">
                                 <option></option>
                                 <option>Product</option>
                                 <option>Service</option>
@@ -60,7 +86,7 @@ Inventories
 
                             <label for="exampleInputEmail1">Buying Price</label>
 
-                            <input type="float" class="form-control" id="exampleInputEmail1"
+                            <input name="buying_price" type="float" class="form-control" id="exampleInputEmail1"
                                 aria-describedby="emailHelp">
                         </div>
 
@@ -68,18 +94,27 @@ Inventories
                         <div class="form-group">
                             <label for="exampleInputEmail1">Selling Price</label>
 
-                            <input type="float" class="form-control" id="exampleInputEmail1"
+                            <input name="selling_price" type="float" class="form-control" id="exampleInputEmail1"
                                 aria-describedby="emailHelp">
                         </div>
+
+
+                        <div class="modal-footer">
+
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            
+                            <button type="submit" class="btn btn-primary">Save</button>
+        
+                        </div>
+
 
                     </form>
 
 
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
+
+                
+
             </div>
         </div>
     </div>
@@ -89,8 +124,8 @@ Inventories
 
 
 <div class="container-fluid" style="margin-top: 30px;">
-    <table class="table">
-        <thead class="thead-dark">
+    <table class="table" id="myTable">
+        <thead>
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
@@ -153,7 +188,6 @@ Inventories
                             </div>
                         </div>
                     </div>
-
 
 
                     <!-- Button trigger modal -->
@@ -287,6 +321,19 @@ Inventories
                 </td>
             </tr>
         </tbody>
+
+        <tfoot>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Buying Price</th>
+                <th>Selling Price</th>
+                <th>Stock</th>
+                <th>Action</th>
+            </tr>
+        </tfoot>
+
     </table>
 </div>
 

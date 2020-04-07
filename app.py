@@ -1,7 +1,7 @@
 # importing
 # import <filename>
 # from filename import <.....>
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
 
 # calling/ instanciating
 app = Flask(__name__)
@@ -50,8 +50,24 @@ def about():
     return render_template('about.html')
 
 
-@app.route('/inventories')
+@app.route('/inventories', methods=['GET', 'POST'])
 def inventories():
+
+    # recieve from a form
+    
+    if request.method == 'POST':
+        name = request.form['name']
+        inv_type = request.form['type']
+        buying_price = request.form['buying_price']
+        selling_price = request.form['selling_price']
+
+        print(name)
+        print(inv_type)
+        print(buying_price)
+        print(selling_price)
+
+        return redirect(url_for('inventories'))
+ 
     return render_template('inventories.html')
 
 
