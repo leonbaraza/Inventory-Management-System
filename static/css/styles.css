@@ -1,0 +1,10 @@
+body{
+    font-family:Georgia, 'Times New Roman', Times, serif;
+    background-color: red;
+}
+
+.pie_chart, .line_graph{
+    width: 70%;
+    margin: auto;
+    margin-top: 40px;
+}

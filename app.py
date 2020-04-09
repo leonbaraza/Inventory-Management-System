@@ -125,12 +125,24 @@ def data_visualization():
     # Initialize your pie chart
     pie_chart = pygal.Pie()
 
+
+    my_pie_data = [
+        ('Nairobi', 63),
+        ('Mombasa', 20),
+        ('Kilifi', 17),
+        ('Machakos', 30),
+        ('Kiambu', 7)
+    ]
+
+
     pie_chart.title = 'Distribution of corona virus in kenya'
-    pie_chart.add('Nairobi', 63)
-    pie_chart.add('Mombasa', 20)
-    pie_chart.add('Kilifi', 17)
-    pie_chart.add('Machakos', 30)
-    pie_chart.add('Kiambu', 7)
+    for each in my_pie_data:
+        pie_chart.add(each[0], each[1])
+    # pie_chart.add('Nairobi', 63)
+    # pie_chart.add('Mombasa', 20)
+    # pie_chart.add('Kilifi', 17)
+    # pie_chart.add('Machakos', 30)
+    # pie_chart.add('Kiambu', 7)
 
     pie_data = pie_chart.render_data_uri()
 
@@ -138,14 +150,41 @@ def data_visualization():
 
     # start of line graph
 
+    # represennts sales made in every month
+
+    data = [
+        {'month': 'January', 'total': 22},
+        {'month': 'February', 'total': 27},
+        {'month': 'March', 'total': 23},
+        {'month': 'April', 'total': 20},
+        {'month': 'May', 'total': 12},
+        {'month': 'June', 'total': 32},
+        {'month': 'July', 'total': 42},
+        {'month': 'August', 'total': 72},
+        {'month': 'September', 'total': 52},
+        {'month': 'October', 'total': 42},
+        {'month': 'November', 'total': 92},
+        {'month': 'December', 'total': 102}
+    ]
+    x = []
+    sales = []
+
+    for each in  data:
+        x.append(each['month'])
+        sales.append(each['total'])
+    
+    print(x)
+    print(sales)
+
     line_graph = pygal.Line()
 
-    line_graph.title = 'Browser usage evolution (in %)'
-    line_graph.x_labels = map(str, range(2002, 2013))
-    line_graph.add('Firefox', [None, None,    0, 16.6,   25,   31, 36.4, 45.5, 46.3, 42.8, 37.1])
-    line_graph.add('Chrome',  [None, None, None, None, None, None,    0,  3.9, 10.8, 23.8, 35.3])
-    line_graph.add('IE',      [85.8, 84.6, 84.7, 74.5,   66, 58.6, 54.7, 44.8, 36.2, 26.6, 20.1])
-    line_graph.add('Others',  [14.2, 15.4, 15.3,  8.9,    9, 10.4,  8.9,  5.8,  6.7,  6.8,  7.5])
+    line_graph.title = 'Total sales made in every month in the year 2019'
+    line_graph.x_labels = map(str, x)
+    # line_graph.add('Firefox', [None, None,    0, 16.6,   25,   31, 36.4, 45.5, 46.3, 42.8, 37.1, 42.8])
+    # line_graph.add('Chrome',  [None, None, None, None, None, None,    0,  3.9, 10.8, 23.8, 35.3, 23.8])
+    # line_graph.add('IE',      [85.8, 84.6, 84.7, 74.5,   66, 58.6, 54.7, 44.8, 36.2, 26.6, 20.1, 26.6])
+    # line_graph.add('Others',  [14.2, 15.4, 15.3,  8.9,    9, 10.4,  8.9,  5.8,  6.7,  6.8,  7.5, 26.6])
+    line_graph.add('Total Sales', sales)
 
     line_data = line_graph.render_data_uri()
 
