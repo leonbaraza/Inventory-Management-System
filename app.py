@@ -5,12 +5,96 @@ from flask import Flask, render_template, request, redirect, url_for
 
 import pygal
 
+import psycopg2
+
+from flask_sqlalchemy import SQLAlchemy
+
+from Config.Config import Development,Production
+
+
+''' 
+    We have two ways for connecting to the database in flask
+    1. psycopg2 - Here you write SQL statements
+    2. Flask-SQLAlchemy - Here you use ORM(Object Relational Mapper)
+
+    PSYCOPG2
+    Its a python library that helps write queries in flask
+    HOW TO USE IT
+    1. install it
+
+    2. set up a connection to your database 
+        - username
+        - password
+        - port
+        - root
+        - dbname
+
+    3. connect to using cursor
+    4. execute an SQL Statement
+    5. Fetch your records
+'''
+
+
+'''
+    FLASK-SQLALCHEMY
+    Library that helps us write classes object to communicate to our database without
+    writing sql statements
+
+    EXAMPLE 
+    INSERT INTO sales VALUES (inv_id=1, quantity=10, created=now())
+
+    create a class and it SalesModel
+    then create function that inserts records
+    then insert
+
+    class SalesModel():
+        def insert_sales(self):
+            db.session.add()
+        
+    query
+
+        def query_sales(self):
+            self.query.all()
+
+        select * from sales
+
+
+    STEPS TO USE FLASK-SQLALCHEMY
+    1. install it
+    2. use it
+        - create a connection to the db
+        - load configurations
+        - create an instance of FLASK-SQLALCHEMY by passing in the app
+
+
+'''
+
+
 # calling/ instanciating
 app = Flask(__name__)
+
+# Load configuration
+app.config.from_object(Development)
+
+# calling/ instanciating of SQLAlchemy
+# alway comes with functions and helpers to create our tables
+db = SQLAlchemy(app)
 
 # Creating of endpoints/ routes
 # 1. declaration of a route
 # 2. a function embedded to the route
+
+
+# creating tables
+from models.Inventory import InventoryModel
+
+
+@app.before_first_request
+def create_tables():
+    db.create_all()    
+
+
+
 @app.route('/')
 def hello_world():
     return '<h1>Welcome to web development</h1>'
@@ -122,22 +206,38 @@ def data_visualization():
      2. Partition your pie chart
      '''
 
+
+    conn = psycopg2.connect(" dbname='test' user='postgres' host='localhost' port='5432' password='123456' ")
+
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT type, count(type)
+        FROM public.inventories
+        GROUP BY type;    
+    """)
+
+    product_service = cur.fetchall()
+
+    # print(product_service)
+
     # Initialize your pie chart
     pie_chart = pygal.Pie()
 
 
-    my_pie_data = [
-        ('Nairobi', 63),
-        ('Mombasa', 20),
-        ('Kilifi', 17),
-        ('Machakos', 30),
-        ('Kiambu', 7)
-    ]
+    # my_pie_data = [
+    #     ('Nairobi', 63),
+    #     ('Mombasa', 20),
+    #     ('Kilifi', 17),
+    #     ('Machakos', 30),
+    #     ('Kiambu', 7)
+    # ]
 
 
-    pie_chart.title = 'Distribution of corona virus in kenya'
-    for each in my_pie_data:
+    pie_chart.title = 'Ratio of product and service'
+    for each in product_service:
         pie_chart.add(each[0], each[1])
+
     # pie_chart.add('Nairobi', 63)
     # pie_chart.add('Mombasa', 20)
     # pie_chart.add('Kilifi', 17)
@@ -151,6 +251,17 @@ def data_visualization():
     # start of line graph
 
     # represennts sales made in every month
+
+    cur.execute("""
+        SELECT EXTRACT(MONTH FROM s.created_at) as sales_month, sum(quantity * selling_price) as total_sales
+        from sales as s
+        join inventories as i on s.inv_id = i.id
+        GROUP BY sales_month
+        ORDER BY sales_month
+    """)
+
+    monthly_sales=cur.fetchall()
+    # print(monthly_sales)
 
     data = [
         {'month': 'January', 'total': 22},
@@ -169,12 +280,12 @@ def data_visualization():
     x = []
     sales = []
 
-    for each in  data:
-        x.append(each['month'])
-        sales.append(each['total'])
+    for each in  monthly_sales:
+        x.append(each[0])
+        sales.append(each[1])
     
-    print(x)
-    print(sales)
+    # print(x)
+    # print(sales)
 
     line_graph = pygal.Line()
 
