@@ -135,22 +135,36 @@ Inventories
             </tr>
         </thead>
         <tbody>
+            
+            {% set counter = namespace(value=1) %}
+
+            {% for inv in inventories %}
+
             <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                <td>@mdo</td>
-                <td>@mdo</td>
+
+                <th scope="row">{{ counter.value }}</th>
+
+                <td>{{ inv.name }}</td>
+                <td>{{ inv.inv_type }}</td>
+                <td>{{ inv.buying_price }}</td>
+                <td>{{ inv.selling_price }}</td>
+
+                <td>
+                    {% for each in remaining_stock %}
+                        {% if each[0] == inv.id  %}
+                            {{ each[1] }}
+                        {% endif %}
+                    {% endfor %}
+                </td>
+
                 <td>
 
                     <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#addStock">
+                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#addStock{{ inv.id }}">
                         Add Stock
                     </button>
-
                     <!-- Modal -->
-                    <div class="modal fade" id="addStock" tabindex="-1" role="dialog"
+                    <div class="modal fade" id="addStock{{ inv.id }}" tabindex="-1" role="dialog"
                         aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
@@ -163,7 +177,7 @@ Inventories
                                 <div class="modal-body">
 
 
-                                    <form action="{{ url_for('add_stock') }}" method="POST" >
+                                    <form action="{{ url_for('add_stock', inv_id=inv.id) }}" method="POST" >
 
                                         <div class="form-group">
 
@@ -192,12 +206,12 @@ Inventories
 
 
                     <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#makeSale">
+                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#makeSale{{ inv.id }}">
                         Make Sale
                     </button>
 
                     <!-- Modal -->
-                    <div class="modal fade" id="makeSale" tabindex="-1" role="dialog"
+                    <div class="modal fade" id="makeSale{{  inv.id }}" tabindex="-1" role="dialog"
                         aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
@@ -211,7 +225,7 @@ Inventories
 
 
 
-                                    <form action="{{ url_for('make_sale') }} " method="POST">
+                                    <form action="{{ url_for('make_sale', inv_id=inv.id ) }} " method="POST">
                                         <div class="form-group">
 
                                             <label for="exampleInputEmail1">Quantity</label>
@@ -240,7 +254,11 @@ Inventories
 
 
 
-                    <button type="button" class="btn btn-warning btn-sm">View Sales</button>
+                    <a href="{{ url_for('view_sales', inv_id = inv.id) }}">
+
+                        <button type="button" class="btn btn-warning btn-sm">View Sales</button>
+                    
+                    </a>
 
 
                     <!-- Button trigger modal -->
@@ -324,6 +342,12 @@ Inventories
 
                 </td>
             </tr>
+
+            {% set counter.value = counter.value+1 %}
+
+            {% endfor %}
+
+
         </tbody>
 
         <tfoot>

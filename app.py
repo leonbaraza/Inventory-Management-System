@@ -12,6 +12,7 @@ from flask_sqlalchemy import SQLAlchemy
 from Config.Config import Development,Production
 
 
+
 ''' 
     We have two ways for connecting to the database in flask
     1. psycopg2 - Here you write SQL statements
@@ -84,10 +85,14 @@ db = SQLAlchemy(app)
 # 1. declaration of a route
 # 2. a function embedded to the route
 
+# psycopg2 connection
+conn = psycopg2.connect(" dbname='test' user='postgres' host='localhost' port='5432' password='' ")
+cur = conn.cursor()
 
 # creating tables
 from models.Inventory import InventoryModel
-
+from models.Sales import SalesModel
+from models.Stock import StockModel
 
 @app.before_first_request
 def create_tables():
@@ -139,6 +144,27 @@ def about():
 @app.route('/inventories', methods=['GET', 'POST'])
 def inventories():
 
+    inventories = InventoryModel.fetch_all_inventories()
+
+    cur.execute("""
+    
+    SELECT inv_id, sum(quantity) as "remaining_stock"
+		FROM (SELECT st.inv_id, sum(stock) as "quantity"
+		FROM public.new_stock as st
+		GROUP BY inv_id
+			
+			union all
+			 
+			SELECT sa.inv_id, - sum(quantity) as "quantity"
+		FROM public.new_sales as sa
+		GROUP BY inv_id) as stsa
+		GROUP BY inv_id
+		ORDER BY inv_id;
+
+    """)
+
+    rs = cur.fetchall()
+    
     # recieve from a form
     
     if request.method == 'POST':
@@ -147,35 +173,42 @@ def inventories():
         buying_price = request.form['buying_price']
         selling_price = request.form['selling_price']
 
-        print(name)
-        print(inv_type)
-        print(buying_price)
-        print(selling_price)
+        '''
+        STEPS TO INSERT RECORDS
+        1. create your model object
+        
+        '''
+
+        new_inv = InventoryModel(name=name, inv_type=inv_type, buying_price=buying_price, selling_price=selling_price)
+        new_inv.add_inventories()
+        # InventoryModel.add_inventories(new_inv)
 
         return redirect(url_for('inventories'))
  
-    return render_template('inventories.html')
+    return render_template('inventories.html', inventories=inventories, remaining_stock=rs)
 
 
 # A ROUTE TO RECIEVE STOCK DATA FROM ADD STOCK MODAL
 
-@app.route('/add_stock', methods=['POST'])
-def add_stock():
-
+@app.route('/add_stock/<inv_id>', methods=['POST'])
+def add_stock(inv_id):
+    # print(inv_id)
     # check if the method is post
     if request.method == 'POST':
         stock = request.form['stock']
-        print(stock)
+        new_stock = StockModel(inv_id=inv_id, stock=stock)
+        new_stock.add_stock()
 
         return redirect(url_for('inventories'))
 
 
-@app.route('/make_sale', methods=['POST'])
-def make_sale():
+@app.route('/make_sale/<inv_id>', methods=['POST'])
+def make_sale(inv_id):
 
     if request.method == 'POST':
         quantity = request.form['quantity']
-        print(quantity)
+        new_sale = SalesModel(inv_id=inv_id, quantity=quantity)
+        new_sale.add_sales()
 
         return redirect(url_for('inventories'))
 
@@ -205,11 +238,6 @@ def data_visualization():
      1. add title
      2. Partition your pie chart
      '''
-
-
-    conn = psycopg2.connect(" dbname='test' user='postgres' host='localhost' port='5432' password='123456' ")
-
-    cur = conn.cursor()
 
     cur.execute("""
         SELECT type, count(type)
@@ -306,6 +334,17 @@ def data_visualization():
 
     '''
     return render_template('charts.html', pie=pie_data, line=line_data)
+
+
+@app.route('/view_sales/<inv_id>')
+def view_sales(inv_id):
+
+    sales = SalesModel.get_sales_by_id(inv_id)
+    inv_name = InventoryModel.fetch_by_id(inv_id)
+
+    return render_template('view_sales.html', sales=sales, 
+                            inv_name=inv_name)
+
 
 
 # Run your app

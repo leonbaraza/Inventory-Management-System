@@ -1,13 +1,15 @@
+# import secrets
 
 class Config():
     DEBUG = True
     SECRET_KEY = 'dsgvsdfsdvndvndfnkvsdfvsxsvndfvndfvndfvnwe12ss'
+    # SECRET_KEY = secrets.token_hex(16)
 
 class Development(Config):
     # database://user:password@host:port/databasename
-    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:123456@127.0.0.1:5432/test'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:L6@127.0.0.1:5432/test'
 
 
-class Production():
+class Production(Config):
     pass
 
