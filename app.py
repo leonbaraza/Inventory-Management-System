@@ -1,7 +1,7 @@
 # importing
 # import <filename>
 # from filename import <.....>
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 
 import pygal
 
@@ -183,6 +183,8 @@ def inventories():
         new_inv.add_inventories()
         # InventoryModel.add_inventories(new_inv)
 
+        flash(u'Inventory added successfully.', 'error')
+
         return redirect(url_for('inventories'))
  
     return render_template('inventories.html', inventories=inventories, remaining_stock=rs)
@@ -212,8 +214,11 @@ def make_sale(inv_id):
 
         return redirect(url_for('inventories'))
 
-@app.route('/edit', methods=['GET', 'POST'])
-def edit():
+
+@app.route('/edit/<inv_id>', methods=['GET', 'POST'])
+def edit(inv_id):
+
+    record = InventoryModel.query.filter_by(id=inv_id).first()
 
     # recieve from a form
     
@@ -223,10 +228,13 @@ def edit():
         buying_price = request.form['buying_price']
         selling_price = request.form['selling_price']
 
-        print(name)
-        print(inv_type)
-        print(buying_price)
-        print(selling_price)
+        if record:
+            record.name = name
+            record.inv_type = inv_type
+            record.buying_price=buying_price
+            record.selling_price=selling_price
+
+            db.session.commit()
 
         return redirect(url_for('inventories'))
  
@@ -339,12 +347,61 @@ def data_visualization():
 @app.route('/view_sales/<inv_id>')
 def view_sales(inv_id):
 
+    cur.execute(f"""
+    
+    SELECT inv_id, sum(quantity) as "remaining_stock"
+		FROM (SELECT st.inv_id, sum(stock) as "quantity"
+		FROM public.new_stock as st
+		GROUP BY inv_id
+			
+			union all
+			 
+			SELECT sa.inv_id, - sum(quantity) as "quantity"
+		FROM public.new_sales as sa
+		GROUP BY inv_id) as stsa
+		WHERE inv_id={inv_id}
+		GROUP BY inv_id;
+    
+    """)
+
+    rec = cur.fetchall()
+    print(rec)
+
+
     sales = SalesModel.get_sales_by_id(inv_id)
     inv_name = InventoryModel.fetch_by_id(inv_id)
 
     return render_template('view_sales.html', sales=sales, 
                             inv_name=inv_name)
 
+
+@app.route('/delete/<inv_id>')
+def delete_inventory(inv_id):
+    
+    record = InventoryModel.query.filter_by(id=inv_id).first()
+
+    # all - get all records based on the cond and return for me in a list
+            # always use indexing or loops
+            # record[1].name
+            # [<InventoryModel1>]
+            
+
+    # first - return the first obj based on the cond
+            # record.name
+            # <InventoryModel1>
+            # user authentication
+
+
+    if record:
+        db.session.delete(record)
+        db.session.commit()
+
+    else:
+        print('Record does not exist')
+
+    flash(u"Recorded deleted", 'danger')
+
+    return redirect(url_for('inventories'))
 
 
 # Run your app

@@ -7,7 +7,7 @@ class Config():
 
 class Development(Config):
     # database://user:password@host:port/databasename
-    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:L6@127.0.0.1:5432/test'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:L@127.0.0.1:5432/test'
 
 
 class Production(Config):

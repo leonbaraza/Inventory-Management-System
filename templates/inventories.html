@@ -262,12 +262,12 @@ Inventories
 
 
                     <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#editInventory">
+                    <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#editInventory{{ inv.id }}">
                         Edit
                     </button>
 
                     <!-- Modal -->
-                    <div class="modal fade" id="editInventory" tabindex="-1" role="dialog"
+                    <div class="modal fade" id="editInventory{{ inv.id }}" tabindex="-1" role="dialog"
                         aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
@@ -280,13 +280,13 @@ Inventories
                                 <div class="modal-body">
 
 
-                                    <form action="{{ url_for('edit') }}" method="POST" >
+                                    <form action="{{ url_for('edit', inv_id=inv.id) }}" method="POST" >
 
                                         <!-- name field -->
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Name</label>
 
-                                            <input name="name" type="name" class="form-control" id="exampleInputEmail1"
+                                            <input name="name" value="{{ inv.name }}" type="name" class="form-control" id="exampleInputEmail1"
                                                 aria-describedby="emailHelp">
 
                                             <small id="emailHelp" class="form-text text-muted">Add stock for this
@@ -299,7 +299,7 @@ Inventories
                                             <label for="exampleInputEmail1">Type</label>
 
                                             <select name="type" class="form-control" id="exampleFormControlSelect1">
-                                                <option></option>
+                                                <option>{{ inv.inv_type }}</option>
                                                 <option>Product</option>
                                                 <option>Service</option>
                                             </select>
@@ -310,7 +310,7 @@ Inventories
 
                                             <label for="exampleInputEmail1">Buying Price</label>
 
-                                            <input name="buying_price" type="float" class="form-control" id="exampleInputEmail1"
+                                            <input name="buying_price" value="{{ inv.buying_price }}" type="float" class="form-control" id="exampleInputEmail1"
                                                 aria-describedby="emailHelp">
                                         </div>
 
@@ -318,7 +318,7 @@ Inventories
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Selling Price</label>
 
-                                            <input name="selling_price" type="float" class="form-control" id="exampleInputEmail1"
+                                            <input name="selling_price" value="{{ inv.selling_price }}" type="float" class="form-control" id="exampleInputEmail1"
                                                 aria-describedby="emailHelp">
                                         </div>
                                         
@@ -338,7 +338,11 @@ Inventories
 
 
 
-                    <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                    <a href="{{ url_for('delete_inventory', inv_id = inv.id) }}">
+
+                        <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                    
+                    </a>
 
                 </td>
             </tr>
